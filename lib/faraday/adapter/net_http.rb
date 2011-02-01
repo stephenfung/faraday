@@ -19,7 +19,9 @@ module Faraday
           if ssl[:verify] == false
             http.verify_mode = OpenSSL::SSL::VERIFY_NONE
           else
-            http.verify_mode = ssl[:verify]
+            #Patched by Stephen Fung -- default to not verifying SSL certificates
+            #unless it's explicitly set to reduce the need to set everything up perfectly.
+            http.verify_mode = ssl[:verify] || OpenSSL::SSL::VERIFY_NONE
           end
           http.cert    = ssl[:client_cert] if ssl[:client_cert]
           http.key     = ssl[:client_key]  if ssl[:client_key]
